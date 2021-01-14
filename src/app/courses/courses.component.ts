@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class CoursesComponent implements OnInit {
 
   titulo: string = "LISTA DE CURSOS !!";
-  anchoImagen: string = '40px';
+   anchoImagen: string = '40px';
   cursos: any[] = [
     {
       id: 1,
@@ -30,9 +30,18 @@ export class CoursesComponent implements OnInit {
     }
   ]
 
-  constructor() { }
+  constructor() { 
+
+   //this.eliminarCursos();
+  }
 
   ngOnInit(): void {
+  }
+
+  eliminarCursos(){
+    setTimeout(() => {
+      this.cursos = [];
+    }, 5000);
   }
 
 editarCurso(curso:any){
