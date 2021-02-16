@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Curso } from '../curso';
 
 @Component({
   selector: 'ed-courses',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
-export class CoursesComponent implements OnInit {
+export class CoursesComponent implements OnInit , AfterViewInit {
 
   titulo: string = "LISTA DE CURSOS !!";
    anchoImagen: string = '40px';
-  cursos: any[] = [
+  @ViewChild('filtro',{static: false})
+   filtro: ElementRef;
+   textoFiltro: string = '';
+  
+   cursos: any[] = [
     {
       id: 1,
       name: 'TypeScript Desde Cero',
@@ -30,7 +36,7 @@ export class CoursesComponent implements OnInit {
     }
   ]
 
-  constructor() { 
+  constructor(private router:Router) { 
 
    //this.eliminarCursos();
   }
@@ -38,25 +44,24 @@ export class CoursesComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(){
+    this.filtro.nativeElement.value = 'Angular';
+  }
+
   eliminarCursos(){
     setTimeout(() => {
       this.cursos = [];
     }, 5000);
   }
-
-editarCurso(curso:any){
-  console.log('Edit, ',curso);
-};
-
-eliminarCurso(curso:any){
-  console.log('Eliminar, ',curso);
-};
-
-onMouseover(event:any){
-  console.log('Mouse over',event);
-};
-
-onDoubleClick(event:any){
-  console.log('Double Click',event);
-}
+  onEditCurso(curso:Curso){
+     console.log('[Courses] Edit',curso);
+     //Redirección: course/{curso.id}
+     this.router.navigate([`course/${curso.id}`]);
+  }
+  deleteCurso(curso:Curso){
+    console.log('[Courses] Delete',curso);
+    this.cursos = this.cursos.filter((c: Curso)=>{
+      return c.id !== curso.id
+    });
+  }
 }
