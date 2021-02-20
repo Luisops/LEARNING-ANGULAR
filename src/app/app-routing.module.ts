@@ -8,6 +8,11 @@ import { SidenavComponent } from './sidenav/sidenav.component';
  
 const routes: Routes = [
   {
+    path:'',
+    redirectTo:'courses', 
+    pathMatch: 'full'
+  },
+  {
   path:'dashboard',
   component: DashboardComponent, 
 },

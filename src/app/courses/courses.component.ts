@@ -1,5 +1,6 @@
 import { Component, OnInit ,ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CoursesService } from '../courses.service';
 import { Curso } from '../curso';
 
 @Component({
@@ -8,44 +9,47 @@ import { Curso } from '../curso';
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit , AfterViewInit {
-
+//Contraseña: eybooks.to
   titulo: string = "LISTA DE CURSOS !!";
    anchoImagen: string = '40px';
   @ViewChild('filtro',{static: false})
    filtro: ElementRef;
-   textoFiltro: string = '';
+   private _textoFiltro: string = '';
   
-   cursos: any[] = [
-    {
-      id: 1,
-      name: 'TypeScript Desde Cero',
-      startDate: 'August 10, 2019',
-      description: 'Lleva JavaScript al siguiente nivel con tipado',
-      price: 25.99,
-      rating: 4.5,
-      imageUrl: 'assets/images/TypeScript.png'
-    },
-    {
-      id: 2,
-      name: 'Angular Desde Cero',
-      startDate: 'August 10, 2019',
-      description: 'Lleva JavaScript al siguiente nivel con tipado',
-      price: 25.99,
-      rating: 4.5,
-      imageUrl: 'assets/images/3Angular.png'
-    }
-  ]
+  //cambie el estado de este atributo
+   set textoFiltro(t: string){
+    console.log('textoFiltro',t);
+    this._textoFiltro = t;
+    //filtrar los cursos
+    this.cursos =  t? this.filtrarCursos(t): this.service.getCourses();
+  }
 
-  constructor(private router:Router) { 
+  //nos va a permitir a l leer el texto filtro
+  
+   get textoFiltro(){
+     return this._textoFiltro;
+  }
 
+   cursos: Curso[];
+
+  constructor(private router:Router, private service: CoursesService) { 
+    
    //this.eliminarCursos();
   }
 
   ngOnInit(): void {
+    this.cursos = this.service.getCourses();
+    setTimeout(()=>{
+      this.textoFiltro = 'Angular'
+    },1000)
   }
 
   ngAfterViewInit(){
     this.filtro.nativeElement.value = 'Angular';
+  }
+
+  filtrarCursos(texto:String){
+   return this.cursos.filter((curso:Curso)=> curso.name.toLowerCase().indexOf(texto.toLowerCase()) >= 0)
   }
 
   eliminarCursos(){
